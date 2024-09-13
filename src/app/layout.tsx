@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import Sidebar from "@/components/ui/sidebar";
+const Sidebar = dynamic(() => import("@/components/ui/sidebar"), {
+  ssr: false,
+});
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,12 +24,14 @@ export default function RootLayout({
       <body
         className={cn(
           "min-h-screen w-full bg-white text-black flex",
-          inter.className,
-          { "debug-screens": process.env.NODE_ENV === "development" }
+          inter.className
+          // { "debug-screens": process.env.NODE_ENV === "development" }
         )}
       >
         {/* Sidebar */}
-        <Sidebar />
+        <div className="hidden md:block">
+          <Sidebar />
+        </div>
         {/* main page */}
         <div className="p-8 w-full">{children}</div>
       </body>
